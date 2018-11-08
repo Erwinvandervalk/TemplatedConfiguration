@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using TemplatedConfiguration;
 using Xunit;
 
-namespace TemplatedConfigurationSource.Tests
+namespace TemplatedConfiguration.Tests
 {
-    public class RecursiveSourceTests
+    public class TemplatedConfigurationSourceTests
     {
         private readonly IConfigurationRoot _configurationRoot;
 
-        public RecursiveSourceTests()
+        public TemplatedConfigurationSourceTests()
         {
             _configurationRoot = new ConfigurationBuilder()
                 .WithRecursiveTemplateSupport(
@@ -22,24 +21,31 @@ namespace TemplatedConfigurationSource.Tests
                         .AddInMemoryCollection(new Dictionary<string, string>
                         {
                             {"TemplatedSetting", "this comes from the default setting: '{DefaultSetting}'"},
+                            {"CaseInsensitiveSetting", "this comes from the default setting: '{defaultsetting}'"},
                             {"Recursive", "this is {Recursive}"},
                         })
                 ).Build();
         }
 
-        [Fact]
-        public void Can_get_value_without_template()
+
+        [Theory]
+        [InlineData("SettingWithoutTemplate")] // Correctly cased
+        [InlineData("settingwithouttemplate")] // Proves Case Insensititivity
+        public void Can_get_value_without_template(string key)
         {
-            var result = _configurationRoot.GetValue<string>("SettingWithoutTemplate");
+            var result = _configurationRoot.GetValue<string>(key);
 
             Assert.Equal("normal value", result);
         }
 
 
-        [Fact]
-        public void Can_get_templated_default_value()
+        [Theory]
+        [InlineData("TemplatedSetting")] // Correctly cased
+        [InlineData("templatedsetting")] // Proves Case Insensititivity on root template name
+        [InlineData("CaseInsensitiveSetting")] // Proves Case Insensititivity on recursive template
+        public void Can_get_templated_default_value(string key)
         {
-            var result = _configurationRoot.GetValue<string>("TemplatedSetting");
+            var result = _configurationRoot.GetValue<string>(key);
 
             Assert.Equal("this comes from the default setting: '[default value]'", result);
         }
