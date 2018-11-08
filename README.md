@@ -1,0 +1,1 @@
+# Templated Configuration Source for Microsoft.Extensions.Configuration
