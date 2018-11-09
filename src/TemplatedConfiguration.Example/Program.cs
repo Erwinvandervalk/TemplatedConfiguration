@@ -22,7 +22,6 @@ namespace TemplatedConfiguration.Example
                         .AddIniFile("Config.ini")
                         .AddCommandLine(args)
                         .AddEnvironmentVariables()
-                        
                     )
                 .Build();
 
