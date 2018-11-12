@@ -34,15 +34,15 @@ namespace TemplatedConfiguration
     public class TemplatedConfigurationProvider : IConfigurationProvider
     {
         private static readonly Regex _regex = new Regex(@"(\{[\w,\-,\.]*\})", RegexOptions.Compiled);
-        private readonly IConfigurationRoot _source;
+        public readonly IConfigurationRoot InnerConfiguration;
 
         /// <summary>Initialize a new instance from the source.</summary>
-        /// <param name="source">The source settings.</param>
-        public TemplatedConfigurationProvider(IConfigurationRoot source)
+        /// <param name="innerConfiguration">The source settings.</param>
+        public TemplatedConfigurationProvider(IConfigurationRoot innerConfiguration)
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            _source = source;
+            if (innerConfiguration == null)
+                throw new ArgumentNullException(nameof(innerConfiguration));
+            InnerConfiguration = innerConfiguration;
         }
 
         public bool TryGet(string key, out string value)
@@ -52,7 +52,7 @@ namespace TemplatedConfiguration
 
         private bool TryGetInternal(TemplatedSettingKey key, HashSet<TemplatedSettingKey> visited, out string value)
         {
-            value = _source[key.Name];
+            value = InnerConfiguration[key.Name];
             if (value == null)
                 return false;
 
@@ -82,22 +82,22 @@ namespace TemplatedConfiguration
 
         public void Set(string key, string value)
         {
-            _source[key] = value;
+            InnerConfiguration[key] = value;
         }
 
         public IChangeToken GetReloadToken()
         {
-            return _source.GetReloadToken();
+            return InnerConfiguration.GetReloadToken();
         }
 
         public void Load()
         {
-            _source.Reload();
+            InnerConfiguration.Reload();
         }
 
         public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string path)
         {
-            return _source.Providers.Aggregate(Enumerable.Empty<string>(),
+            return InnerConfiguration.Providers.Aggregate(Enumerable.Empty<string>(),
                 (seed, source) =>
                     source.GetChildKeys(seed, path)).Distinct().Select(
                 key =>

@@ -10,5 +10,11 @@ namespace TemplatedConfiguration
             builder.Add(new TemplatedConfigurationSource(configurer));
             return builder;
         }
+
+        public static IConfigurationBuilder WithRecursiveTemplateSupport(this IConfigurationBuilder builder)
+        {
+            builder.Add(new TemplatedConfigurationSource(builder));
+            return builder;
+        }
     }
 }

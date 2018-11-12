@@ -9,20 +9,19 @@ namespace TemplatedConfiguration.Example
         static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()
-                .WithRecursiveTemplateSupport(
+                // First set up defaults
+                .AddInMemoryCollection(Global.DefaultSettings)
+                .AddInMemoryCollection(ComponentA.DefaultSettings)
+                .AddInMemoryCollection(ComponentB.DefaultSettings)
 
-                    // Wrap the configuration providers with the provider that supports templating
-                    builder => builder
-                        // First set up defaults
-                        .AddInMemoryCollection(Global.DefaultSettings)
-                        .AddInMemoryCollection(ComponentA.DefaultSettings)
-                        .AddInMemoryCollection(ComponentB.DefaultSettings)
+                // Then set up the 'overrides'. 
+                .AddIniFile("Config.ini")
+                .AddCommandLine(args)
+                .AddEnvironmentVariables()
 
-                        // Then set up the 'overrides'. 
-                        .AddIniFile("Config.ini")
-                        .AddCommandLine(args)
-                        .AddEnvironmentVariables()
-                    )
+                // Wrap the configuration providers with the provider that supports templating
+                .WithRecursiveTemplateSupport()
+
                 .Build();
 
             Console.WriteLine("Component A: Connection String: " +config.GetValue<string>("ComponentA.ConnectionString"));

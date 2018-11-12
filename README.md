@@ -26,18 +26,21 @@ Another example is when accessing an URL from code, where the URL is usually com
 
     using TemplatedConfiguration;
 
-    /* ... */
+    /* snip ... */
 
         var config = new ConfigurationBuilder()
-            .WithRecursiveTemplateSupport(
+                // First set up defaults, for example using in memory
+                .AddInMemoryCollection(Global.DefaultSettings)
+
+                // Then set up the 'overrides'. 
+                .AddIniFile("Config.ini")
+                .AddCommandLine(args)
+                .AddEnvironmentVariables()
+
                 // Wrap the configuration providers with the provider that supports templating
-                builder => builder
-                    // First set up defaults
-                    // Then set up the 'overrides'. 
-                    .AddIniFile("Config.ini")
-                    .AddCommandLine(args)
-                    .AddEnvironmentVariables()
-                )
+                .WithRecursiveTemplateSupport()
+
+                // Any provider added after this will NOT partake in the templating. 
             .Build();
 ```
 
