@@ -24,19 +24,25 @@ namespace TemplatedConfiguration.Example
 
                 .Build();
 
-            Console.WriteLine("Component A: Connection String: " +config.GetValue<string>("ComponentA.ConnectionString"));
+                Console.WriteLine("Component A: Connection String: " +config.GetValue<string>("ComponentA.ConnectionString"));
             Console.WriteLine("Component B: Connection String: " +config.GetValue<string>("ComponentB.ConnectionString"));
 
             Console.ReadLine();
+        }
+
+        public class MySEttings
+        {
+            public string SettingA { get; set; }
         }
 
         public class Global
         {
             public static readonly Dictionary<string, string> DefaultSettings = new Dictionary<string, string>()
             {
+                {"settinga", "abc" },
                 // Default global settings. 
                 {"Global.ConnectionString.Security", "Integrated Security=true;" },
-                {"ComponentA.ConnectionString.Settings", "" },
+                {"Global.ConnectionString.Settings", "" },
             };
         }
 
