@@ -10,7 +10,7 @@
     <PackageLicenseUrl>https://opensource.org/licenses/MIT/</PackageLicenseUrl>
     <Description>This library is an extension for Microsoft.Extensions.Configuration, which helps you to do recursive templating in configuration settings.
 
-When retrieving a configuration setting value, it will look for {placeholders}. If it finds any placeholder, it will try to see if the placeholder is actually configured as a setting. It will then (recursively) replace any placeholders within the setting's value.
+When retrieving a configuration setting value, it will look for placeholders. If it finds any placeholder, it will try to see if the placeholder is actually configured as a setting. It will then (recursively) replace any placeholders within the setting's value.
 
 This means you can compose configuration settings out of other configuration settings, which will allow you to override only parts of a config setting or the entire setting.</Description>
     <Authors>Erwin van der Valk</Authors>
