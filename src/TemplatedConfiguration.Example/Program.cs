@@ -41,8 +41,8 @@ namespace TemplatedConfiguration.Example
             {
                 {"settinga", "abc" },
                 // Default global settings. 
-                {"Global.ConnectionString.Security", "Integrated Security=true;" },
-                {"Global.ConnectionString.Settings", "" },
+                {"Global:ConnectionString:Security", "Integrated Security=true;" },
+                {"Global:ConnectionString:Settings", "" },
             };
         }
 
@@ -52,15 +52,15 @@ namespace TemplatedConfiguration.Example
             {
                 // The connection string is composed from parts
                 // But can also be overwritten as a whole
-                {"ComponentA.ConnectionString", "{ComponentA.ConnectionString.Security}Server={ComponentA.ConnectionString.ServerName};Database={ComponentA.ConnectionString.DatabaseName}{ComponentA.ConnectionString.Settings}"},
+                {"ComponentA.ConnectionString", "{ComponentA:ConnectionString:Security}Server={ComponentA:ConnectionString:ServerName};Database={ComponentA:ConnectionString:DatabaseName}{ComponentA:ConnectionString:Settings}"},
 
                 // Each part can be overwritten per 'component' or globally
-                {"ComponentA.ConnectionString.Security", "{Global.ConnectionString.Security}" },
-                {"ComponentA.ConnectionString.ServerName", "{Global.ConnectionString.ServerName}" },
-                {"ComponentA.ConnectionString.Settings", "{Global.ConnectionString.Settings}" },
+                {"ComponentA:ConnectionString:Security", "{Global:ConnectionString:Security}" },
+                {"ComponentA:ConnectionString:ServerName", "{Global:ConnectionString:ServerName}" },
+                {"ComponentA:ConnectionString:Settings", "{Global:ConnectionString:Settings}" },
 
                 // Some default settings are simply hard coded, such as the default database name
-                {"ComponentA.ConnectionString.DatabaseName", "ComponentA" },
+                {"ComponentA:ConnectionString:DatabaseName", "ComponentA" },
             };
         }
         public class ComponentB
@@ -69,15 +69,15 @@ namespace TemplatedConfiguration.Example
             {
                 // The connection string is composed from parts
                 // But can also be overwritten as a whole
-                {"ComponentB.ConnectionString", "{ComponentB.ConnectionString.Security}Server={ComponentB.ServerName};Database={ComponentB.DatabaseName}{ComponentB.ConnectionString.Settings}"},
+                {"ComponentB.ConnectionString", "{ComponentB:ConnectionString:Security}Server={ComponentB.ServerName};Database={ComponentB.DatabaseName}{ComponentB:ConnectionString:Settings}"},
 
                 // Each part can be overwritten per 'component' or globally
-                {"ComponentB.ConnectionString.Security", "{Global.ConnectionString.Security}" },
-                {"ComponentB.ConnectionString.ServerName", "{Global.ConnectionString.ServerName}" },
-                {"ComponentB.ConnectionString.Settings", "{Global.ConnectionString.Settings}" },
+                {"ComponentB:ConnectionString:Security", "{Global:ConnectionString:Security}" },
+                {"ComponentB:ConnectionString:ServerName", "{Global:ConnectionString:ServerName}" },
+                {"ComponentB:ConnectionString:Settings", "{Global:ConnectionString:Settings}" },
 
                 // Some default settings are simply hard coded, such as the default database name
-                {"ComponentB.ConnectionString.DatabaseName", "ComponentA" },
+                {"ComponentB:ConnectionString:DatabaseName", "ComponentA" },
             };
         }
     }
