@@ -31,7 +31,7 @@ namespace TemplatedConfiguration
         }
     }
 
-    public class TemplatedConfigurationProvider : IConfigurationProvider
+    public class TemplatedConfigurationProvider : ConfigurationProvider
     {
         private static readonly Regex _regex = new Regex(@"(\{[\w,\-,\.:]*\})", RegexOptions.Compiled);
         public readonly IConfigurationRoot InnerConfiguration;
@@ -40,12 +40,10 @@ namespace TemplatedConfiguration
         /// <param name="innerConfiguration">The source settings.</param>
         public TemplatedConfigurationProvider(IConfigurationRoot innerConfiguration)
         {
-            if (innerConfiguration == null)
-                throw new ArgumentNullException(nameof(innerConfiguration));
             InnerConfiguration = innerConfiguration;
         }
 
-        public bool TryGet(string key, out string value)
+        public override bool TryGet(string key, out string value)
         {
             return TryGetInternal(key, new HashSet<TemplatedSettingKey>(), out value);
         }
@@ -78,37 +76,6 @@ namespace TemplatedConfiguration
             }
 
             return true;
-        }
-
-        public void Set(string key, string value)
-        {
-            InnerConfiguration[key] = value;
-        }
-
-        public IChangeToken GetReloadToken()
-        {
-            return InnerConfiguration.GetReloadToken();
-        }
-
-        public void Load()
-        {
-            InnerConfiguration.Reload();
-        }
-
-        public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string path)
-        {
-            return InnerConfiguration.Providers.Aggregate(Enumerable.Empty<string>(),
-                (seed, source) =>
-                    source.GetChildKeys(seed, path)).Distinct().Select(
-                key =>
-                {
-                    string key1;
-                    if (path != null)
-                        key1 = ConfigurationPath.Combine(path, key);
-                    else
-                        key1 = key;
-                    return key1;
-                });
         }
     }
 }

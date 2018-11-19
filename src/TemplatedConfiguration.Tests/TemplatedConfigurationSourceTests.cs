@@ -121,6 +121,27 @@ namespace TemplatedConfiguration.Tests
 
         }
 
+        [Fact]
+        public void Can_work_with_sections()
+        {
+            var configurationRoot = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    { "name:name1", "name1"},
+                    { "name:name2", "name2"},
+                    { "name:name3", "name3"},
+                })
+                .WithRecursiveTemplateSupport()
+                .Build();
+
+            Assert.Equal(3, configurationRoot.Get<TestSettings>().Name.Count);
+        }
+
+        public class TestSettings
+        {
+            public Dictionary<string, string> Name { get; set; }
+        }
+
         private class FakeConfigSource : IConfigurationSource
         {
             public int BuildCount = 0;
