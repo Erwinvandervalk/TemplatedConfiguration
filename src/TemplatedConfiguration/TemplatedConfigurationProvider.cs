@@ -45,6 +45,11 @@ namespace TemplatedConfiguration
 
         public override bool TryGet(string key, out string value)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                value = null;
+                return false;
+            }
             return TryGetInternal(key, new HashSet<TemplatedSettingKey>(), out value);
         }
 
